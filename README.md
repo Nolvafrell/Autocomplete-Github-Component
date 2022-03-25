@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Hi there!
+
+This is a provided solution for code challenge for recruitment purposes. Feel free to ask any questions you like!
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
