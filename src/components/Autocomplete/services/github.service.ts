@@ -1,10 +1,6 @@
 import { Canceler } from "axios";
-import {
-  IRepoAPI,
-  ISearchAPI,
-  IUserAPI,
-} from "../components/Autocomplete/models";
 import { handleGetFromAPI } from "../helpers";
+import { IRepoAPI, ISearchAPI, IUserAPI } from "../models";
 
 export let cancelGithubFetching: Canceler;
 
