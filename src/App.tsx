@@ -9,9 +9,9 @@ const PageWrapper = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background: #8e2de2;
-  background: -webkit-linear-gradient(to right, #4a00e0, #8e2de2);
-  background: linear-gradient(to right, #4a00e0, #8e2de2);
+  background: #00c3ff;
+  background: -webkit-linear-gradient(to right, #ffff1c, #00c3ff);
+  background: linear-gradient(to right, #ffff1c, #00c3ff);
 `;
 
 const Container = styled.div`
@@ -25,7 +25,7 @@ const App: FC = () => {
     <PageWrapper>
       <Container>
         <Typography variant="h4" gutterBottom>
-          GitHub Autocomplete Search
+          🔎 GitHub Autocomplete Search
         </Typography>
         <Autocomplete />
       </Container>

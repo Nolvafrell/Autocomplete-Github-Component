@@ -8,9 +8,10 @@ import {
   useState,
 } from "react";
 import { githubService } from "../../../services";
+import { ISuggestion } from "../models";
 
 interface IAutocompleteContext {
-  reposSearchResults: any | undefined;
+  suggestions: ISuggestion[] | undefined;
 }
 interface IAutocompleteActionsContext {
   updateAutocompleteValue: TUpdateAutocompleteValue;
@@ -29,7 +30,8 @@ export const useAutocompleteActionsContext = () =>
   useContext(AutocompleteActionsContext);
 
 export const AutocompleteContextProvider: FC = ({ children }) => {
-  const [reposSearchResults, setReposSearchResults] = useState();
+  const [suggestions, setSuggestions] = useState();
+
   const updateAutocompleteValue: TUpdateAutocompleteValue = () => {
     console.log("OK");
   };
@@ -38,7 +40,7 @@ export const AutocompleteContextProvider: FC = ({ children }) => {
     const repos = await githubService.searchRepos("auto");
 
     if (repos && !(repos instanceof Error)) {
-      setReposSearchResults(repos);
+      setSuggestions(repos);
     }
   }, []);
 
@@ -48,9 +50,9 @@ export const AutocompleteContextProvider: FC = ({ children }) => {
 
   const values = useMemo(
     () => ({
-      reposSearchResults,
+      suggestions,
     }),
-    [reposSearchResults],
+    [suggestions],
   );
   const actions = useMemo(
     () => ({

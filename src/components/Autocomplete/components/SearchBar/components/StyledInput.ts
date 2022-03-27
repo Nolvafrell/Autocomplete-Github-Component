@@ -3,6 +3,7 @@ import { blue, grey } from "@mui/material/colors";
 
 export const StyledInputElement = styled("input")(
   () => `
+    font-family: 'JetBrains Mono', monospace;
     min-width: 320px;
     max-width: 50vw;
     font-size: 20px;
