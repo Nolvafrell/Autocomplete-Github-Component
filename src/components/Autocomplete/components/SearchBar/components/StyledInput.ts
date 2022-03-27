@@ -1,9 +1,9 @@
-import { InputBase, styled, TextField } from "@mui/material";
+import { styled } from "@mui/material";
 import { blue, grey } from "@mui/material/colors";
 
 export const StyledInput = styled("input")(
   () => `
-    font-family: 'JetBrains Mono', monospace;
+    font-family: inherit;
     min-width: 320px;
     max-width: 50vw;
     font-size: 20px;
