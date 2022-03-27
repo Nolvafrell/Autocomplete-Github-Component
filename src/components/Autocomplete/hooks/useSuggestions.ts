@@ -20,17 +20,20 @@ interface IReturn {
   activeSuggestion: number;
   setActiveSuggestion: StateSetter<number>;
   suggestions?: ISuggestion[];
+  error?: Error;
 }
 
 export const useSuggestions: TUseSuggestions = (search) => {
   const [suggestions, setSuggestions] = useState<ISuggestion[]>();
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [activeSuggestion, setActiveSuggestion] = useState<number>(0);
+  const [error, setError] = useState<Error>();
 
   const debouncedSearchValue = useDebounce(search, 300);
 
   const getSuggestions = useCallback(async (search: string) => {
     setIsFetching(true);
+    setError(undefined);
 
     const repos = await githubService.searchRepos(search);
     const users = await githubService.searchUsers(search);
@@ -42,6 +45,12 @@ export const useSuggestions: TUseSuggestions = (search) => {
       !(users instanceof Error)
     ) {
       setSuggestions(modelApiData(repos, users));
+    } else if (repos instanceof Error) {
+      setSuggestions(undefined);
+      setError(repos);
+    } else if (users instanceof Error) {
+      setSuggestions(undefined);
+      setError(users);
     }
 
     setIsFetching(false);
@@ -49,6 +58,7 @@ export const useSuggestions: TUseSuggestions = (search) => {
 
   const resetSuggestions = useCallback(() => {
     setSuggestions(undefined);
+    setError(undefined);
     setActiveSuggestion(0);
   }, []);
 
@@ -76,5 +86,11 @@ export const useSuggestions: TUseSuggestions = (search) => {
       : resetSuggestions();
   }, [getSuggestions, debouncedSearchValue, resetSuggestions]);
 
-  return { isFetching, suggestions, activeSuggestion, setActiveSuggestion };
+  return {
+    isFetching,
+    suggestions,
+    activeSuggestion,
+    setActiveSuggestion,
+    error,
+  };
 };

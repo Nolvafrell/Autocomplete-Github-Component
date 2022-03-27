@@ -18,6 +18,7 @@ interface IAutocompleteContext {
   activeSuggestion: number;
   suggestions?: ISuggestion[];
   searchValue?: string;
+  error?: Error;
 }
 interface IAutocompleteActionsContext {
   changeAutocompleteValue: TChangeAutocompleteValue;
@@ -44,8 +45,13 @@ export const useAutocompleteActionsContext = () =>
 export const AutocompleteContextProvider: FC = ({ children }) => {
   const [searchValue, setSearchValue] = useState<string>();
 
-  const { isFetching, suggestions, activeSuggestion, setActiveSuggestion } =
-    useSuggestions(searchValue);
+  const {
+    isFetching,
+    suggestions,
+    activeSuggestion,
+    setActiveSuggestion,
+    error,
+  } = useSuggestions(searchValue);
 
   const changeAutocompleteValue: TChangeAutocompleteValue = (event) => {
     const search = event.currentTarget.value;
@@ -98,8 +104,9 @@ export const AutocompleteContextProvider: FC = ({ children }) => {
       suggestions,
       activeSuggestion,
       searchValue,
+      error,
     }),
-    [activeSuggestion, isFetching, searchValue, suggestions],
+    [activeSuggestion, error, isFetching, searchValue, suggestions],
   );
   const actions = useMemo(
     () => ({

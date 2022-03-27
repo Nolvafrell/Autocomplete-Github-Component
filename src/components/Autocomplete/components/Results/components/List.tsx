@@ -1,12 +1,14 @@
 import { FC, useMemo } from "react";
 import { useAutocompleteContext } from "../../../context";
 import { ISuggestion, SuggestionType } from "../../../models";
+import { Error } from "./Error";
+import { NoResults } from "./NoResults";
 import { Repo } from "./Repo";
 import { StyledListElement } from "./StyledListElement";
 import { User } from "./User";
 
 export const List: FC = () => {
-  const { suggestions, activeSuggestion } = useAutocompleteContext();
+  const { suggestions, activeSuggestion, error } = useAutocompleteContext();
 
   const list = useMemo(
     () =>
@@ -22,5 +24,14 @@ export const List: FC = () => {
     [activeSuggestion, suggestions],
   );
 
-  return <>{list}</>;
+  const results = useMemo(
+    () => (suggestions?.length !== 0 ? list : <NoResults />),
+    [list, suggestions],
+  );
+
+  if (error) {
+    return <Error />;
+  }
+
+  return <>{results}</>;
 };

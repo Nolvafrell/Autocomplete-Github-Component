@@ -4,9 +4,9 @@ import { useAutocompleteContext } from "../../context";
 import { List, Loader, StyledWrapper } from "./components";
 
 export const Results: FC = () => {
-  const { isFetching, suggestions } = useAutocompleteContext();
+  const { isFetching, suggestions, error } = useAutocompleteContext();
 
-  const letGrow = isFetching || !!suggestions;
+  const letGrow = isFetching || !!suggestions || !!error;
 
   const list = useMemo(
     () => (isFetching ? <Loader /> : <List />),
