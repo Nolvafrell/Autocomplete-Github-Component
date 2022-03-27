@@ -1,5 +1,8 @@
 import { FC } from "react";
+import { useAutocompleteContext } from "../../context";
 
 export const Results: FC = () => {
-  return <>Results</>;
+  const { isLoading } = useAutocompleteContext();
+
+  return <>{isLoading ? "LOADING" : "RESULTS"}</>;
 };
