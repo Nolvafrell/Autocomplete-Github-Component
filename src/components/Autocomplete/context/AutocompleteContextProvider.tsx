@@ -53,28 +53,23 @@ export const AutocompleteContextProvider: FC = ({ children }) => {
 
   const handleKeys: THandleKeys = useCallback(
     (event) => {
-      const suggestion = activeSuggestion;
       if (suggestions)
         switch (event.key) {
           case HandledKeyName.enter:
-            console.log("pressed enter");
-
-            console.log("xxx - go to", suggestions[suggestion].url);
-
-            setSearchValue(suggestions[suggestion].name);
-
+            window.open(suggestions[activeSuggestion].url, "_blank");
+            setSearchValue(suggestions[activeSuggestion].name);
             break;
           case HandledKeyName.arrowUp:
-            if (suggestion === 0) {
+            if (activeSuggestion === 0) {
               return;
             }
-            setActiveSuggestion(suggestion - 1);
+            setActiveSuggestion(activeSuggestion - 1);
             break;
           case HandledKeyName.arrowDown:
-            if (suggestion === suggestions?.length) {
+            if (activeSuggestion === suggestions?.length) {
               return;
             }
-            setActiveSuggestion(suggestion + 1);
+            setActiveSuggestion(activeSuggestion + 1);
             break;
           default:
             break;
