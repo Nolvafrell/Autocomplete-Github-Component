@@ -9,8 +9,7 @@ import {
   useCallback,
 } from "react";
 import { useSuggestions } from "../hooks";
-import { ISuggestion } from "../models";
-import { HandledKeyName } from "../models/front/keys.model";
+import { ISuggestion, HandledKeyName } from "../models";
 
 interface IAutocompleteContext {
   isFetching: boolean;
@@ -37,11 +36,10 @@ export const useAutocompleteActionsContext = () =>
   useContext(AutocompleteActionsContext);
 
 export const AutocompleteContextProvider: FC = ({ children }) => {
-  const [activeSuggestion, setActiveSuggestion] = useState<number>(0);
-
   const [searchValue, setSearchValue] = useState<string>();
 
-  const { isFetching, suggestions } = useSuggestions(searchValue);
+  const { isFetching, suggestions, activeSuggestion, setActiveSuggestion } =
+    useSuggestions(searchValue);
 
   const changeAutocompleteValue: TChangeAutocompleteValue = (event) => {
     const search = event.currentTarget.value;
@@ -75,7 +73,7 @@ export const AutocompleteContextProvider: FC = ({ children }) => {
             break;
         }
     },
-    [activeSuggestion, suggestions],
+    [activeSuggestion, setActiveSuggestion, suggestions],
   );
 
   const values = useMemo(

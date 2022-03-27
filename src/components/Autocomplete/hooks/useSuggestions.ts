@@ -2,7 +2,13 @@ import { useCallback, useEffect, useState } from "react";
 import { githubService } from "../../../services";
 import { mapRepoAPI } from "../helpers";
 import { mapUserAPI } from "../helpers/mapUserAPI.helper";
-import { IRepoAPI, ISearchAPI, ISuggestion, IUserAPI } from "../models";
+import {
+  IRepoAPI,
+  ISearchAPI,
+  ISuggestion,
+  IUserAPI,
+  StateSetter,
+} from "../models";
 import { useDebounce } from "./useDebouce";
 
 type TUseSuggestions = (search: string | undefined) => IReturn;
@@ -12,12 +18,15 @@ type TModelApiData = (
 ) => ISuggestion[];
 interface IReturn {
   isFetching: boolean;
-  suggestions: ISuggestion[] | undefined;
+  activeSuggestion: number;
+  setActiveSuggestion: StateSetter<number>;
+  suggestions?: ISuggestion[];
 }
 
 export const useSuggestions: TUseSuggestions = (search) => {
   const [suggestions, setSuggestions] = useState<ISuggestion[]>();
   const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [activeSuggestion, setActiveSuggestion] = useState<number>(0);
 
   const debouncedSearchValue = useDebounce(search, 300);
 
@@ -39,6 +48,11 @@ export const useSuggestions: TUseSuggestions = (search) => {
     setIsFetching(false);
   }, []);
 
+  const resetSuggestions = useCallback(() => {
+    setSuggestions(undefined);
+    setActiveSuggestion(0);
+  }, []);
+
   const modelApiData: TModelApiData = (repos, users) => {
     let suggestions: ISuggestion[] = [];
 
@@ -58,11 +72,10 @@ export const useSuggestions: TUseSuggestions = (search) => {
   };
 
   useEffect(() => {
-    console.log("xxx", debouncedSearchValue);
     debouncedSearchValue && debouncedSearchValue !== ""
       ? getSuggestions(debouncedSearchValue)
-      : setSuggestions(undefined);
-  }, [getSuggestions, debouncedSearchValue]);
+      : resetSuggestions();
+  }, [getSuggestions, debouncedSearchValue, resetSuggestions]);
 
-  return { isFetching, suggestions };
+  return { isFetching, suggestions, activeSuggestion, setActiveSuggestion };
 };
