@@ -1,8 +1,12 @@
 import { FC } from "react";
-import { useAutocompleteActionsContext } from "../../context";
+import {
+  useAutocompleteActionsContext,
+  useAutocompleteContext,
+} from "../../context";
 import { InputComponent } from "./components/InputComponent";
 
 export const SearchBar: FC = () => {
+  const { searchValue } = useAutocompleteContext();
   const { changeAutocompleteValue, handleKeys } =
     useAutocompleteActionsContext();
 
@@ -10,6 +14,7 @@ export const SearchBar: FC = () => {
     <>
       <InputComponent
         placeholder="Start search"
+        value={searchValue}
         onChange={changeAutocompleteValue}
         onKeyDown={handleKeys}
       />

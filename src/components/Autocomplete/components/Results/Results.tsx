@@ -1,16 +1,21 @@
 import { Grow } from "@mui/material";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { useAutocompleteContext } from "../../context";
-import { Loader, StyledWrapper } from "./components";
+import { List, Loader, StyledWrapper } from "./components";
 
 export const Results: FC = () => {
   const { isFetching, suggestions } = useAutocompleteContext();
 
   const letGrow = isFetching || !!suggestions;
 
+  const list = useMemo(
+    () => (isFetching ? <Loader /> : <List />),
+    [isFetching],
+  );
+
   return (
     <Grow in={letGrow}>
-      <StyledWrapper>{isFetching ? <Loader /> : "RESULTS"}</StyledWrapper>
+      <StyledWrapper>{list}</StyledWrapper>
     </Grow>
   );
 };

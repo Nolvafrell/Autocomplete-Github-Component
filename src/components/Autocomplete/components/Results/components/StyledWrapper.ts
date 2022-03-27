@@ -17,4 +17,5 @@ export const StyledWrapper = styled.div`
   padding: 15px 15px;
   margin-top: 15px;
   transition: all 0.2s ease;
+  overflow: auto;
 `;
