@@ -7,7 +7,9 @@ import {
   ChangeEvent,
   KeyboardEvent,
   useCallback,
+  SyntheticEvent,
 } from "react";
+import { openInNewTab } from "../helpers";
 import { useSuggestions } from "../hooks";
 import { ISuggestion, HandledKeyName } from "../models";
 
@@ -20,9 +22,13 @@ interface IAutocompleteContext {
 interface IAutocompleteActionsContext {
   changeAutocompleteValue: TChangeAutocompleteValue;
   handleKeys: THandleKeys;
+  handleOpenResult: THandleOpenResult;
 }
 type TChangeAutocompleteValue = (event: ChangeEvent<HTMLInputElement>) => void;
 type THandleKeys = (event: KeyboardEvent<HTMLInputElement>) => void;
+type THandleOpenResult = (
+  event: SyntheticEvent<HTMLDivElement>,
+) => (url: string, name: string) => void;
 
 const AutocompleteContext = createContext<IAutocompleteContext>(
   {} as IAutocompleteContext,
@@ -49,13 +55,23 @@ export const AutocompleteContextProvider: FC = ({ children }) => {
       : setSearchValue(undefined);
   };
 
+  const handleOpenResult: THandleOpenResult = useCallback(
+    (event) => (url, name) => {
+      openInNewTab(url);
+      setSearchValue(name);
+    },
+    [],
+  );
+
   const handleKeys: THandleKeys = useCallback(
     (event) => {
       if (suggestions)
         switch (event.key) {
           case HandledKeyName.enter:
-            window.open(suggestions[activeSuggestion].url, "_blank");
-            setSearchValue(suggestions[activeSuggestion].name);
+            handleOpenResult(event)(
+              suggestions[activeSuggestion].url,
+              suggestions[activeSuggestion].name,
+            );
             break;
           case HandledKeyName.arrowUp:
             if (activeSuggestion === 0) {
@@ -73,7 +89,7 @@ export const AutocompleteContextProvider: FC = ({ children }) => {
             break;
         }
     },
-    [activeSuggestion, setActiveSuggestion, suggestions],
+    [activeSuggestion, handleOpenResult, setActiveSuggestion, suggestions],
   );
 
   const values = useMemo(
@@ -89,8 +105,9 @@ export const AutocompleteContextProvider: FC = ({ children }) => {
     () => ({
       changeAutocompleteValue,
       handleKeys,
+      handleOpenResult,
     }),
-    [handleKeys],
+    [handleKeys, handleOpenResult],
   );
 
   return (

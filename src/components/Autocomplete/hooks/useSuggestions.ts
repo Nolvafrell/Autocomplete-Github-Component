@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { githubService } from "../../../services";
-import { mapRepoAPI } from "../helpers";
-import { mapUserAPI } from "../helpers/mapUserAPI.helper";
+import { mapRepoAPI, mapUserAPI } from "../helpers";
 import {
   IRepoAPI,
   ISearchAPI,
